@@ -313,16 +313,20 @@ async def shutdown_event():
 
 if __name__ == "__main__":
     import uvicorn
-    
+    import os
+
     # Validate configuration
     config.validate_required_keys()
-    
+
     logger.info("Starting SmartCity AI Traffic Optimization System")
-    
+
+    # Use PORT from environment (for Render) or fallback to config
+    port = int(os.getenv("PORT", config.PORT))
+
     uvicorn.run(
         "backend.main:app",
         host=config.HOST,
-        port=config.PORT,
+        port=port,
         reload=config.DEBUG,
         log_level="debug" if config.DEBUG else "info"
     )
